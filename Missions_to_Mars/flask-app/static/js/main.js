@@ -38,6 +38,7 @@ function updatePage(data) {
   d3.select('.featured_image_url').attr('src', data.featured_image_url)
 
   d3.select('.weather').text(data.weather)
+
   d3.select('.facts').html(data.facts)
 
   d3.select('#results')

@@ -2,6 +2,7 @@
 import os
 import requests
 import pandas as pd
+import datetime as dt
 from time import sleep
 import pymongo
 from bs4 import BeautifulSoup
@@ -24,7 +25,7 @@ def scrape():
     browser.visit(url)
 
     # wait a few seconds for page to fully load
-    sleep(10)
+    sleep(1)
 
     # retrieve the latest news titles from the page
     latest_news_title = browser.find_by_css(
@@ -86,7 +87,7 @@ def scrape():
         columns={0: 'Description', 1: 'Value'}).set_index('Description')
 
     # convert pandas dataframe to html table
-    mars_facts_table = mars_facts.to_html().replace('\n', '')
+    mars_facts_table = mars_facts.to_html(classes="striped")
 
     # Mars Hemispheres
     executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
@@ -113,7 +114,7 @@ def scrape():
             img_url = browser.links.find_by_text('Original').first['href']
             hemisphere_image_urls.append(
                 {'title': title.replace(' Enhanced', ''), 'img_url': img_url})
-            sleep(3)
+            sleep(1)
 
     except ElementDoesNotExist:
         print("hemispheres data scraping completed")
@@ -132,25 +133,16 @@ def scrape():
     collection = db.news
 
     # declare the dictionary to save
+    timestamp = dt.datetime.now()
+
     latest_news = {
         'news_title': latest_news_title,
         'news_caption': latest_news_caption,
         'featured_image_url': featured_image_url,
         'weather': mars_weather,
         'facts': mars_facts_table,
-        'hemispheres': hemisphere_image_urls
+        'hemispheres': hemisphere_image_urls,
+        'modified': timestamp
     }
 
-    # store dictionary to the database
-    try:
-        collection.insert_one(latest_news)
-        return latest_news
-    except:
-        return {
-            'news_title': '',
-            'news_caption': '',
-            'featured_image_url': '',
-            'weather': '',
-            'facts': '',
-            'hemispheres': []
-        }
+    return latest_news
