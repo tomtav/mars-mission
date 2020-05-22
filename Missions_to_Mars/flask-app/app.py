@@ -19,12 +19,20 @@ def create_app():
     @app.route('/', methods=['GET'])
     def home():
         """Home Page"""
-        return render_template('index.html')
+        return render_template('index.html', data={
+            'news_title': '',
+            'news_caption': '',
+            'featured_image_url': '',
+            'weather': '',
+            'facts': '',
+            'hemispheres': []
+        })
 
     @app.route('/scrape', methods=['GET'])
     def run_scrape():
         """Scrape Mars Data from the Internet"""
         mars_data = scrape()
+        print(mars_data)
         return jsonify(mars_data)
 
     return app

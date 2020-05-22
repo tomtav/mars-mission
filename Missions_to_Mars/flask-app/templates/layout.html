@@ -13,26 +13,44 @@
 </head>
 
 <body>
-  <header>
-    <nav class="pushpin pinned">
+  <header class="navbar-fixed">
+    <nav>
       <div class="nav-wrapper">
-        <!-- <a href="#" class="brand-logo">MISSION TO MARS</a> -->
+        <a href="#" class="brand-logo">MISSION TO MARS</a>
         <ul id="nav-mobile" class="right">
-          <li>{{ nav_link('home', 'Home') }}</li>
+          <li>
+            <a id="refresh-data" class="btn-large waves-effect waves-light waves-red">
+              <div id="preloader-btn" class="preloader-wrapper medium active hidden">
+                <div class="spinner-layer spinner-white-only">
+                  <div class="circle-clipper left">
+                    <div class="circle"></div>
+                  </div>
+                  <div class="gap-patch">
+                    <div class="circle"></div>
+                  </div>
+                  <div class="circle-clipper right">
+                    <div class="circle"></div>
+                  </div>
+                </div>
+              </div>
+              <span class="refresh-icon">
+                <i class="material-icons left">cloud_download</i>
+                <span>Scrape New Data</span>
+              </span>
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
   </header>
   <main>
     <div class="parallax-container">
-      <div class="parallax"><img src="{{ url_for('static', filename='images/pia23740.jpg') }}"></div>
+      <div class="parallax"><img src="{{ url_for('static', filename='images/pia23740.jpg') }}">
+      </div>
     </div>
     <div class="section white">
       <div class="row container">
-        {% block header %}
-        <h1 class="header">Mission to Mars</h1>
-        <hr />
-        {% endblock %}
+        {% block header %}{% endblock %}
         <section>
           {% for message in get_flashed_messages() %}
           <div class="flash">{{ message }}</div>
@@ -42,7 +60,8 @@
       </div>
     </div>
     <div class="parallax-container">
-      <div class="parallax"><img src="{{ url_for('static', filename='images/pia23182.jpg') }}"></div>
+      <div class="parallax"><img src="{{ url_for('static', filename='images/pia23182.jpg') }}">
+      </div>
     </div>
   </main>
   <footer class="page-footer no-padding">
@@ -50,7 +69,7 @@
       © 2020 Misson to Mars
     </div>
   </footer>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.7/d3.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.7/d3.min.js"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>

@@ -3,6 +3,7 @@ import os
 import requests
 import pandas as pd
 from time import sleep
+import pymongo
 from bs4 import BeautifulSoup
 from splinter import Browser
 from splinter.exceptions import ElementDoesNotExist
@@ -121,13 +122,35 @@ def scrape():
     browser.quit()
 
     # python dictionary of all scraped data
-    return {
-        'news': {
-            'title': latest_news_title,
-            'caption': latest_news_caption
-        },
+    conn = 'mongodb://localhost:27017'
+    client = pymongo.MongoClient(conn)
+
+    # Declare the database
+    db = client.mars_db
+
+    # Declare the collection
+    collection = db.news
+
+    # declare the dictionary to save
+    latest_news = {
+        'news_title': latest_news_title,
+        'news_caption': latest_news_caption,
         'featured_image_url': featured_image_url,
         'weather': mars_weather,
         'facts': mars_facts_table,
         'hemispheres': hemisphere_image_urls
     }
+
+    # store dictionary to the database
+    try:
+        collection.insert_one(latest_news)
+        return latest_news
+    except:
+        return {
+            'news_title': '',
+            'news_caption': '',
+            'featured_image_url': '',
+            'weather': '',
+            'facts': '',
+            'hemispheres': []
+        }

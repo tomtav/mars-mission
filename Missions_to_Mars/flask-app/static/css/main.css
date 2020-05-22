@@ -31,3 +31,21 @@ i.large {
             transform: translateX(0px);
   }
 }
+
+@media (max-width: 601px) {
+  nav .btn-large {
+    padding: 0 15px;
+  }
+  nav span.refresh-icon > i {
+    margin-right: 0px;
+  }
+  nav span.refresh-icon > span {
+    display: none;
+  }
+}
+
+@media (max-width: 401px) {
+  nav .brand-logo {
+    font-size: 1.2em;
+  }
+}

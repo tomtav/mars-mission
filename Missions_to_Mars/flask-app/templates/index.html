@@ -2,43 +2,18 @@
 
 {% block title %}Mission to Mars Dashboard{% endblock %}
 
-{% block header %}
-<div class="card-panel white-text red darken-4 z-depth-4 jumbotron">
-  <h1>Mission to Mars</h1>
-  <a id="refresh-data" class="waves-effect waves-light btn-large">
-    <div id="preloader-btn" class="preloader-wrapper medium active hidden">
-      <div class="spinner-layer spinner-white-only">
-        <div class="circle-clipper left">
-          <div class="circle"></div>
-        </div>
-        <div class="gap-patch">
-          <div class="circle"></div>
-        </div>
-        <div class="circle-clipper right">
-          <div class="circle"></div>
-        </div>
-      </div>
-    </div>
-    <span class="refresh-icon">
-      <i class="material-icons left">cloud_download</i>
-      Scrape New Data
-    </span>
-  </a>
-</div>
-{% endblock  %}
-
 {% block content %}
 <div class="row">
   <div class="col m8">
     <h3>Latest Mars News</h3>
-    <h5 class="news-title">News Title</h5>
-    <p class="news-caption">News caption.</p>
+    <h5 class="news-title">{{ data.news_title }}</h5>
+    <p class="news-caption">{{ data.news_caption }}</p>
   </div>
   <div class="col m4">
     <div class="card blue-grey lighten-2">
       <div class="card-content white-text">
         <span class="card-title">Current Weather on Mars</span>
-        <p class="weather"></p>
+        <p class="weather">{{ data.weather }}</p>
       </div>
     </div>
   </div>
@@ -46,55 +21,29 @@
 <div class="row">
   <div class="col m8">
     <h3>Featured Mars Image</h3>
-    <img class="featured_image_url responsive-img" src='https://placeimg.com/1920/800/nature/grayscale' />
+    <img class="featured_image_url responsive-img" src="{{ data.featured_image_url }}" />
   </div>
-  <div class="col m4">
+  <div class=" col m4">
     <h5>Mars Facts</h5>
-    <div class="facts"></div>
+    <div class="facts">{{ data.facts }}</div>
   </div>
 </div>
 <div class="row">
   <h3 class="center-align">Mars Hemispheres</h3>
   <hr />
-  <div class="col s12 m6">
-    <div class="card hemi-1">
-      <div class="card-image">
-        <img src="https://placeimg.com/600/600/technology/grayscale">
-      </div>
-      <div class="card-content">
-        <span class="card-title grey-text text-darken-4">Card Title</span>
-      </div>
-    </div>
-  </div>
-  <div class="col s12 m6">
-    <div class="card hemi-2">
-      <div class="card-image">
-        <img src="https://placeimg.com/600/600/technology/grayscale">
-      </div>
-      <div class="card-content">
-        <span class="card-title grey-text text-darken-4">Card Title</span>
+  <div id="results">
+    {% for item in data.hemispheres %}
+    <div class="col s12 m6">
+      <div class="card hoverable">
+        <div class="card-image">
+          <img src="{{ item.img_url }}">
+        </div>
+        <div class="card-content">
+          <span class="card-title grey-text text-darken-4">{{ item.title }}</span>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="col s12 m6">
-    <div class="card hemi-3">
-      <div class="card-image">
-        <img src="https://placeimg.com/600/600/technology/grayscale">
-      </div>
-      <div class="card-content">
-        <span class="card-title grey-text text-darken-4">Card Title</span>
-      </div>
-    </div>
-  </div>
-  <div class="col s12 m6">
-    <div class="card hemi-4">
-      <div class="card-image">
-        <img src="https://placeimg.com/600/600/technology/grayscale">
-      </div>
-      <div class="card-content">
-        <span class="card-title grey-text text-darken-4">Card Title</span>
-      </div>
-    </div>
+    {% endfor %}
   </div>
 </div>
 </div>

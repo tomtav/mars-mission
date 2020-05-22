@@ -1,44 +1,59 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+  // enable parallax effect
   var elems = document.querySelectorAll('.parallax');
-  var paralaxPage = M.Parallax.init(elems);
+  var parallaxPage = M.Parallax.init(elems);
 
-  var elems = document.querySelectorAll('.pushpin');
-  var pinnedNav = M.Pushpin.init(elems);
-
+  // scrape new data on button click
   d3.select('#refresh-data').on('click', () => {
-    console.log('download data button clicked')
-    d3.select('.refresh-icon').classed('hidden', true)
-    d3.select('#preloader-btn').classed('hidden', false)
-
-
     d3.event.preventDefault();
-    d3.json('/scrape').then((data) => {
-      console.log('d3 json : ', data)
-      d3.select('.refresh-icon').classed('hidden', false)
-      d3.select('#preloader-btn').classed('hidden', true)
-      updatePage(data)
-    })
-  })
+    getData();
+  });
+
 });
 
+// retrieve data from the web
+function getData() {
+  let isLoading = true;
+  updateLoader(isLoading)
+
+  d3.json('/scrape').then(data => {
+    isLoading = false;
+    updateLoader(isLoading);
+    updatePage(data);
+  });
+
+}
+
+function updateLoader(isLoading) {
+  d3.select('.refresh-icon').classed('hidden', isLoading);
+  d3.select('#preloader-btn').classed('hidden', !isLoading);
+}
+
 function updatePage(data) {
-  /*'news': {
-  'title': latest_news_title,
-    'caption': latest_news_caption
-  },
-  'featured_image_url': featured_image_url,
-  'weather': mars_weather,
-    'facts': mars_facts_table,
-      'hemispheres': hemisphere_image_urls
-  */
-  d3.select('.news-title').text(data.news.title)
-  d3.select('.news-caption').text(data.news.caption)
+
+  d3.select('.news-title').text(data.news_title)
+  d3.select('.news-caption').text(data.news_caption)
+
   d3.select('.featured_image_url').attr('src', data.featured_image_url)
+
   d3.select('.weather').text(data.weather)
   d3.select('.facts').html(data.facts)
-  Object.values(data.hemispheres).forEach((hemi, idx) => {
-    counter = idx + 1
-    d3.select('.hemi-' + counter).select('img').attr('src', hemi.img_url)
-    d3.select('.hemi-' + counter).select('.card-title').text(hemi.title)
-  })
+
+  d3.select('#results')
+    .selectAll('.col,.s12,.m6')
+    .data(data.hemispheres)
+    .enter()
+    .append('div')
+    .attr('class', 'col s12 m6')
+    .each(function (item) {
+      d3.select(this).html(
+        `<div class="card hoverable">
+        <div class="card-image">
+          <img src="${item.img_url}">
+        </div>
+        <div class="card-content">
+          <span class="card-title grey-text text-darken-4">${item.title}</span>
+        </div></div>`)
+    })
 }
